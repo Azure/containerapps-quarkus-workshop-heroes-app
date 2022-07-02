@@ -20,6 +20,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("/api/heroes")
 @Tag(name = "heroes")
 @ApplicationScoped
+@Produces(MediaType.APPLICATION_JSON)
 public class HeroResource {
 
     Logger logger;
@@ -29,24 +30,25 @@ public class HeroResource {
         this.logger = logger;
     }
 
-    @Operation(summary = "Returns a random hero")
     @GET
     @Path("/random")
+    @Operation(summary = "Returns a random hero")
     @APIResponse(
         responseCode = "200",
         content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = Hero.class, required = true))
     )
     public Response getRandomHero() {
-        logger.info("Getting a Random Hero");
+        logger.info("Getting a random hero");
         Hero hero = Hero.findRandom();
-        logger.debug("Found random hero " + hero);
+        logger.debug("Found random hero : " + hero);
         return Response.ok(hero).build();
     }
 
-    @Operation(summary = "Returns hello from the Hero Resource")
-    @Path("/hello")
     @GET
+    @Path("/hello")
     @Produces(MediaType.TEXT_PLAIN)
+    @Tag(name = "hello")
+    @Operation(summary = "Returns hello from the hero resource")
     public String hello() {
         logger.info("Hello from Hero Resource");
         return "Hello from Hero Resource";
